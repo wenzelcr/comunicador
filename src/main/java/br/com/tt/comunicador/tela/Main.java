@@ -61,8 +61,8 @@ public class Main {
     }
 
     private static void listarMensagens(){
-        for( int numero : mensagens ){
-            Util.print(mensagens.toString();
+        for( Mensagem msg : mensagens ){
+            Util.print(msg.getTexto());
         }
 
     }
