@@ -1,7 +1,10 @@
 package br.com.tt.comunicador.tela;
 import br.com.tt.comunicador.common.Util;
+import br.com.tt.comunicador.exceptions.TamanhoMensagemInvalidoException;
 import br.com.tt.comunicador.model.Mensagem;
 import br.com.tt.comunicador.model.Usuario;
+
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -9,62 +12,41 @@ import java.util.List;
 
 public class Main {
 
-    private final static DateTimeFormatter FORMATO = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
     private static Usuario usuarioLogado;
     private static List<Mensagem> mensagens;
+    private static Util util = new Util();
+    private static MenuEntrar menuEntrar = new MenuEntrar(util);
+    private static MenuMensagem menuMensagem = new MenuMensagem(util);
 
     public static void main(String[] args) {
 
         mensagens = new ArrayList<>();
-        entrar();
+        usuarioLogado = menuEntrar.entrar();
 
         do {
-            novaMensagem();
-            Util.print("Deseja sair? (S/N)");
-            if( "S".equals( Util.read() ) ){
+
+            try {
+                mensagens.add(menuMensagem.novaMensagem());
+            } catch (TamanhoMensagemInvalidoException e) {
+                e.printStackTrace();
+            }
+
+            util.print("Deseja sair? (S/N)");
+            if( "S".equals( util.read() ) ){
                 break;
             }
 
         }while(true);
+        listarMensagens();
     }
 
-    private static void entrar(){
-
-        Util.print("Informe seu username: ");
-        String userName = Util.read();
-
-        Util.print("Informe seu nome: ");
-        String nome = Util.read();
-
-        Util.print("Informe seu nascimento (dd/mm/yyyy): ");
-        String nascimentoTexto = Util.read();
-
-        LocalDate nascimento = LocalDate.parse(nascimentoTexto, FORMATO);
-
-        new Usuario(userName, nome, nascimento);
-
-        usuarioLogado = new Usuario(userName, nome, nascimento);
-
-    }
-
-    private static void novaMensagem(){
-
-        Util.print("Digite a mensagem: ");
-
-        String texto = Util.read();
-
-        Mensagem mensagem = new Mensagem(texto);
-
-        mensagens.add(mensagem);
-
-    }
 
     private static void listarMensagens(){
+        String descricoes = new String();
         for( Mensagem msg : mensagens ){
-            Util.print(msg.getTexto());
+            descricoes = descricoes + msg.getDescricao() + "\n";
         }
-
+        util.print(descricoes);
     }
 
 }
