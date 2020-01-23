@@ -26,8 +26,8 @@ public class Usuario {
     }
 
 
-
     public int idade(){
-        return 0;
+
+        return LocalDate.now().getYear() - nascimento.getYear();
     }
 }

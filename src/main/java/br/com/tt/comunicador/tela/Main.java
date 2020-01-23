@@ -26,7 +26,10 @@ public class Main {
         do {
 
             try {
-                mensagens.add(menuMensagem.novaMensagem());
+                Mensagem msg = menuMensagem.novaMensagem();
+                if( msg != null) {
+                    mensagens.add(msg);
+                }
             } catch (TamanhoMensagemInvalidoException e) {
                 e.printStackTrace();
             }
