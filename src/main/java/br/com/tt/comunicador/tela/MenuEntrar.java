@@ -1,6 +1,8 @@
 package br.com.tt.comunicador.tela;
 
 import br.com.tt.comunicador.common.Util;
+import br.com.tt.comunicador.enumerators.EstadoEnum;
+import br.com.tt.comunicador.exceptions.EstadoInexistenteException;
 import br.com.tt.comunicador.model.Usuario;
 
 import java.time.LocalDate;
@@ -16,23 +18,27 @@ class MenuEntrar {
         this.util = util;
     }
 
-    Usuario entrar(){
-
-        util.print("Informe seu username: ");
-        String userName = util.read();
-
-        util.print("Informe seu nome: ");
+    Usuario entrar() throws EstadoInexistenteException {
+        util.print("Informe seu username:");
+        String username = util.read();
+/*        if(username.equals("admin")){
+            throw new IllegalArgumentException("Admin não habilitado");
+        }*/
+        util.print("Informe seu nome:");
         String nome = util.read();
-
-        util.print("Informe seu nascimento (dd/mm/yyyy): ");
+        util.print("Informe a sigla do seu estado:");
+        EstadoEnum estadoEnum;
+        String estado = util.read();
+        try {
+            estadoEnum = EstadoEnum.valueOf(estado);
+        }catch (IllegalArgumentException e){
+            throw new EstadoInexistenteException("Estado inexistente: "+estado);
+        }
+        util.print("Informe seu nascimento (dd/mm/yyyy)");
         String nascimentoTexto = util.read();
-
-        LocalDate nascimento = LocalDate.parse(nascimentoTexto, FORMATO);
-
-        new Usuario(userName, nome, nascimento);
-
-        return new Usuario(userName, nome, nascimento);
-
+        LocalDate nascimento =
+                LocalDate.parse(nascimentoTexto, FORMATO);
+        return new Usuario(username, nome, estadoEnum, nascimento);
     }
 
 }

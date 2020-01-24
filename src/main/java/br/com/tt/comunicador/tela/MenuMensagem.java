@@ -8,23 +8,44 @@ class MenuMensagem {
 
     private Util util;
 
-    public MenuMensagem(Util util) {
+    MenuMensagem(Util util){
         this.util = util;
     }
 
-    Mensagem novaMensagem() throws TamanhoMensagemInvalidoException{
-
-        util.print("Digite a mensagem: ");
+    Mensagem novaMensagem(){
+        util.print("Mensagem: ");
         String texto = util.read();
-
         try {
             return new Mensagem(texto);
 
-        } catch (TamanhoMensagemInvalidoException e) {
+        }catch (TamanhoMensagemInvalidoException e){
+            System.err.println(e);
+            util.print(e.getMessage());
+            return null;
+        } /*finally {
+            algo que sempre deve executar...
+        }*/
+        //dataHora.format(
+        // DateTimeFormatter.ofPattern("dd/MM/yyy"));
+    }
+
+    /**
+     * Copiado apenas para atender outro cenário de teste.
+     */
+    Mensagem novaMensagemComExcecao() throws TamanhoMensagemInvalidoException {
+        util.print("Mensagem: ");
+        String texto = util.read();
+        try {
+            return new Mensagem(texto);
+
+        }catch (TamanhoMensagemInvalidoException e){
             System.err.println(e);
             util.print(e.getMessage());
             throw e;
-        }
-
+        } /*finally {
+            algo que sempre deve executar...
+        }*/
+        //dataHora.format(
+        // DateTimeFormatter.ofPattern("dd/MM/yyy"));
     }
 }
